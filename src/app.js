@@ -2,21 +2,19 @@ const express = require("express");
 
 const app = express();
 
-// routing sequence matters
+app.get("/user", (req, res) => {
+    res.send({firstname: "Amarnath", lastname: "Kumar"})
+})
 
-app.use("/test1", (req, res) => {
-    res.send("routing test1..");
-});
+app.post("/user", (req, res) => {
+    res.send("Saved data to DB successfully...")
+})
+
+app.delete("/user", (req, res) => {
+    res.send("Deleted successfully...")
+})
 
 app.use("/test", (req, res) => {
-    res.send("routing test..");
-});
-
-app.use("/hello", (req, res) => {
-    res.send("hello hello hello..!");
-});
-
-app.use("/", (req, res) => {
     res.send("Hello from the server");
 });
 
