@@ -4,6 +4,10 @@ const app = express();
 
 // routing sequence matters
 
+app.use("/test1", (req, res) => {
+    res.send("routing test1..");
+});
+
 app.use("/test", (req, res) => {
     res.send("routing test..");
 });
