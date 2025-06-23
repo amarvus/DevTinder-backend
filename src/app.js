@@ -47,7 +47,7 @@ app.delete("/user", async (req, res) => {
     const userId = req.body.userId;
     try {
         const deleteUser = await User.findByIdAndDelete(userId);
-        res.send(deleteUser);
+        res.send("User deleted successfully");
     } catch (err) {
         res.status(400).send("Something went wrong!");
     }
@@ -57,12 +57,20 @@ app.patch("/user", async (req, res) => {
     const userId = req.body.userId;
     const data = req.body;
     try {
-        const updatedUser = await User.findByIdAndUpdate(userId, data);
-        res.send(updatedUser);
+        const ALLOWED_UPDATES = ["about", "gender", "age", "skills"];
+        const isUpdateAllowed = Object.keys(data).every((k) => {
+            ALLOWED_UPDATES.includes(k);
+        });
+        if (!isUpdateAllowed) {
+            throw new Error("Update not allowed");
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, data, {runValidators: true});
+        res.send("User data updated successfully");
     } catch (err) {
-        res.status(400).send("Something went wrong!");
+        res.status(400).send("Update failed: " + err.message);
     }
-})
+});
 
 connectDB()
     .then(() => {
@@ -73,6 +81,6 @@ connectDB()
         });
     })
     .catch((err) => {
-        console.error("Unable to connect...");
+        console.error("Unable to connect with database...");
     });
 
