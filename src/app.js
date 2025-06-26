@@ -75,19 +75,30 @@ app.get("/user", async (req, res) => {
 });
 
 app.get("/profile", async (req, res) => {
-    const cookies = req.cookies;
-    const {token} = cookies;
+    try {
+        const cookies = req.cookies;
+        const {token} = cookies;
 
-    const decodedMessage = jwt.verify(token, "DEV@Tinder$123"); // gives user _id
+        if (!token) {
+            throw new Error("Invalid token");
+        }
 
-    const {_id} = decodedMessage;
-    console.log("UserID: " + _id);
+        const decodedMessage = jwt.verify(token, "DEV@Tinder$123"); // gives user _id
 
-    const user = await User.findById({_id: _id})
-    console.log("Name: " + user.firstName + " " + user.lastName);
+        const {_id} = decodedMessage;
+        console.log("UserID: " + _id);
 
-    //console.log(cookies);
-    res.send("reading cookies");
+        const user = await User.findById(_id);
+        if (!user) {
+            throw new Error("User does not exist");
+        }
+        console.log("Name: " + user.firstName + " " + user.lastName);
+
+        //console.log(cookies);
+        res.send("reading cookies");
+    } catch (err) {
+        res.status(400).send("Error: " + err.message);
+    }
 })
 
 app.get("/feed", async (req, res) => {
