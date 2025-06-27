@@ -15,14 +15,12 @@ app.use("/", profileRouter);
 app.use("/", requestRouter);
 
 connectDB()
-    .then(() => {
-        console.log("Database connection established...");
-        app.listen(1234, () => {
-        console.log("Server is successfully listening on port 1234...");
-    
-        });
-    })
-    .catch((err) => {
-        console.error("Unable to connect with database...");
+  .then(() => {
+    console.log("Database connection established...");
+    app.listen(1234, () => {
+      console.log("Server is successfully listening on port 1234...");
     });
-
+  })
+  .catch((err) => {
+    console.error("Unable to connect with database...");
+  });
