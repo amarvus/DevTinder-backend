@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       maxLength: 20,
     },
+    profilePicture: {
+      type: String,
+    },
     emailId: {
       type: String,
       required: true,
